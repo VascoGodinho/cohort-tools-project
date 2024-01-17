@@ -29,7 +29,7 @@ mongoose
     );
 
     // Drop the database
-    await mongoose.connection.db.dropDatabase();
+    /*  await mongoose.connection.db.dropDatabase(); */
   })
   .catch((err) => console.error("Error connecting to mongo", err));
 // ROUTES
@@ -162,16 +162,18 @@ app.get("/api/cohorts/:cohortId", async (req, res) => {
     });
 });
 
-/*app.get("/api/students/cohorts/:cohortId", async (req, res) => {
-  Student.find({cohort: cohortId})
+app.get("/api/students/cohorts/:cohortId", async (req, res) => {
+  Student.find({ cohort: req.params.cohortId })
     .populate("cohort")
     .then((students) => {
       res.status(200).json(students);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while getting students by cohortID" });
+      res
+        .status(500)
+        .json({ message: "Error while getting students by cohortID" });
     });
-});*/
+});
 
 app.put("/api/cohorts/:cohortId", (req, res) => {
   Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true })

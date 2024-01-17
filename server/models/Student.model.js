@@ -11,7 +11,7 @@ const studentSchema = new Schema({
   program: { type: String, required: true },
   background: { type: String, required: true },
   image: { type: String, required: true },
-  cohort: { type: mongoose.Schema.Types.ObjectId, ref: "Cohort" },
+  cohort: { type: mongoose.Schema.Types.ObjectId, ref: "Cohorts" },
   projects: { type: [String] },
 });
 
