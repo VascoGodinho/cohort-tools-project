@@ -73,11 +73,23 @@ app.get("/docs", (req, res) => {
 });
 
 app.get("/api/cohorts", (req, res) => {
-  res.json(cohorts);
+  Cohorts.find()
+    .then((allCohorts) => {
+      res.status(200).json(allCohorts);
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Error while getting all cohorts" });
+    });
 });
 
 app.get("/api/students", (req, res) => {
-  res.json(students);
+  Students.find()
+    .then((allStudents) => {
+      res.status(200).json(allStudents);
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Error while getting all students" });
+    });
 });
 
 // START SERVER
