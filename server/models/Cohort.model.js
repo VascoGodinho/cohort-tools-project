@@ -2,8 +2,8 @@ const { Schema, model, Types } = require("mongoose");
 const mongoose = require("mongoose");
 
 const cohortSchema = new Schema({
-  /*   _id: { type: Number, required: true, unique: true }, */
-  inPrgoress: { type: Boolean, required: true },
+  //_id: { type: Number, required: true, unique: true },
+  inProgress: { type: Boolean, required: true },
   cohortsSlug: { type: String, required: true },
   cohortName: { type: String, required: true },
   program: { type: String, required: true },

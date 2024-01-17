@@ -1,5 +1,5 @@
+const { Schema, model, Types } = require("mongoose");
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
   firstName: { type: String, required: true },
@@ -11,7 +11,7 @@ const studentSchema = new Schema({
   program: { type: String, required: true },
   background: { type: String, required: true },
   image: { type: String, required: true },
-  cohort: { type: Number, min: 0 },
+  cohort: { type: mongoose.Schema.Types.ObjectId, ref: "Cohort" },
   projects: { type: [String] },
 });
 
