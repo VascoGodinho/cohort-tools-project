@@ -108,7 +108,7 @@ app.get("/api/cohorts", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while getting all cohorts" });
+      json({ message: "Error while getting all cohorts" });
     });
 });
 
@@ -120,7 +120,7 @@ app.get("/api/students", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while getting all students" });
+      json({ message: "Error while getting all students" });
     });
 });
 
@@ -132,7 +132,7 @@ app.get("/api/students/:studentId", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while getting one student" });
+      json({ message: "Error while getting one student" });
     });
 });
 
@@ -143,7 +143,7 @@ app.put("/api/students/:studentId", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while updating one student" });
+      json({ message: "Error while updating one student" });
     });
 });
 
@@ -154,7 +154,7 @@ app.delete("/api/students/:studentId", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while deleting one student" });
+      json({ message: "Error while deleting one student" });
     });
 });
 
@@ -165,7 +165,7 @@ app.get("/api/cohorts/:cohortId", async (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while getting one cohort" });
+      json({ message: "Error while getting one cohort" });
     });
 });
 
@@ -177,9 +177,7 @@ app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res
-        .status(500)
-        .json({ message: "Error while getting students by cohortID" });
+      json({ message: "Error while getting students by cohortID" });
     });
 });
 
@@ -190,7 +188,7 @@ app.put("/api/cohorts/:cohortId", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while updating one cohort" });
+      json({ message: "Error while updating one cohort" });
     });
 });
 
@@ -201,7 +199,7 @@ app.delete("/api/cohorts/:cohortId", (req, res, next) => {
     })
     .catch((error) => {
       next(error);
-      res.status(500).json({ message: "Error while deleting one cohort" });
+      json({ message: "Error while deleting one cohort" });
     });
 });
 
