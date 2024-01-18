@@ -29,7 +29,7 @@ mongoose
     );
 
     // Drop the database
-    /*  await mongoose.connection.db.dropDatabase(); */
+    /* await mongoose.connection.db.dropDatabase(); */
   })
   .catch((err) => console.error("Error connecting to mongo", err));
 // ROUTES
@@ -64,10 +64,10 @@ app.post("/api/students", (request, response) => {
 });
 
 app.post("/api/cohorts", (request, response) => {
-  console.log(request.body);
+  console.log("Request Body:", request.body);
   Cohort.create({
-    inProgress: request.body.inPrgoress,
-    cohortsSlug: request.body.cohortsSlug,
+    inProgress: request.body.inProgress,
+    cohortSlug: request.body.cohortSlug,
     cohortName: request.body.cohortName,
     program: request.body.program,
     campus: request.body.campus,
@@ -81,6 +81,7 @@ app.post("/api/cohorts", (request, response) => {
       response.status(201).json(createdCohort);
     })
     .catch((error) => {
+      console.error("Error creating cohort:", error);
       response
         .status(500)
         .json({ message: "Error while creating a new cohort" });
@@ -162,7 +163,7 @@ app.get("/api/cohorts/:cohortId", async (req, res) => {
     });
 });
 
-app.get("/api/students/cohorts/:cohortId", async (req, res) => {
+app.get("/api/students/cohort/:cohortId", async (req, res) => {
   Student.find({ cohort: req.params.cohortId })
     .populate("cohort")
     .then((students) => {
