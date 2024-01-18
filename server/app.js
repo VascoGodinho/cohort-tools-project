@@ -7,18 +7,19 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Cohort = require("./models/Cohort.model.js");
 const Student = require("./models/Student.model.js");
-const cohorts = require("./cohorts.json");
-const students = require("./students.json");
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middleware/error-handling");
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(errorHandler);
+app.use(notFoundHandler);
 
-// STATIC DATA
-// Devs Team - Import the provided files with JSON data of students and cohorts here:
-// ...
 const MONGODB_URI = "mongodb://127.0.0.1:27017/cohort-tools-api";
 
 mongoose
@@ -27,18 +28,16 @@ mongoose
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
     );
-
-    // Drop the database
-    /* await mongoose.connection.db.dropDatabase(); */
   })
   .catch((err) => console.error("Error connecting to mongo", err));
+
 // ROUTES
-//  GET  / route - This is just an example route
+
 app.get("/", (req, res) => {
   res.send("<h1>Cohort-Tools-API</h1>");
 });
 
-app.post("/api/students", (request, response) => {
+app.post("/api/students", (request, response, next) => {
   console.log(request.body);
   Student.create({
     firstName: request.body.firstName,
@@ -57,13 +56,11 @@ app.post("/api/students", (request, response) => {
       response.status(201).json(createdStudent);
     })
     .catch((error) => {
-      response
-        .status(500)
-        .json({ message: "Error while creating a new student" });
+      next(error);
     });
 });
 
-app.post("/api/cohorts", (request, response) => {
+app.post("/api/cohorts", (request, response, next) => {
   console.log("Request Body:", request.body);
   Cohort.create({
     inProgress: request.body.inProgress,
@@ -81,10 +78,7 @@ app.post("/api/cohorts", (request, response) => {
       response.status(201).json(createdCohort);
     })
     .catch((error) => {
-      console.error("Error creating cohort:", error);
-      response
-        .status(500)
-        .json({ message: "Error while creating a new cohort" });
+      next(error);
     });
 });
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
@@ -101,98 +95,96 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
-app.get("/api/cohorts", (req, res) => {
+app.get("/api/cohorts", (req, res, next) => {
   Cohort.find()
     .then((allCohorts) => {
       res.status(200).json(allCohorts);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while getting all cohorts" });
+      next(error);
     });
 });
 
-app.get("/api/students", (req, res) => {
+app.get("/api/students", (req, res, next) => {
   Student.find()
     .populate("cohort")
     .then((allStudents) => {
       res.status(200).json(allStudents);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while getting all students" });
+      next(error);
     });
 });
 
-app.get("/api/students/:studentId", (req, res) => {
+app.get("/api/students/:studentId", (req, res, next) => {
   Student.findById(req.params.studentId)
     .populate("cohort")
     .then((students) => {
       res.status(200).json(students);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while getting one student" });
+      next(error);
     });
 });
 
-app.put("/api/students/:studentId", (req, res) => {
+app.put("/api/students/:studentId", (req, res, next) => {
   Student.findByIdAndUpdate(req.params.studentId, req.body, { new: true })
     .then((updateStudents) => {
       res.status(200).json(updateStudents);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while updating one student" });
+      next(error);
     });
 });
 
-app.delete("/api/students/:studentId", (req, res) => {
+app.delete("/api/students/:studentId", (req, res, next) => {
   Student.findByIdAndDelete(req.params.studentId)
     .then(() => {
       res.status(204).send();
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while deleting one student" });
+      next(error);
     });
 });
 
-app.get("/api/cohorts/:cohortId", async (req, res) => {
+app.get("/api/cohorts/:cohortId", async (req, res, next) => {
   Cohort.findById(req.params.cohortId)
     .then((cohorts) => {
       res.status(200).json(cohorts);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while getting one cohort" });
+      next(error);
     });
 });
 
-app.get("/api/students/cohort/:cohortId", async (req, res) => {
+app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
   Student.find({ cohort: req.params.cohortId })
     .populate("cohort")
     .then((students) => {
       res.status(200).json(students);
     })
     .catch((error) => {
-      res
-        .status(500)
-        .json({ message: "Error while getting students by cohortID" });
+      next(error);
     });
 });
 
-app.put("/api/cohorts/:cohortId", (req, res) => {
+app.put("/api/cohorts/:cohortId", (req, res, next) => {
   Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true })
     .then((updateCohorts) => {
       res.status(200).json(updateCohorts);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while updating one cohort" });
+      next(error);
     });
 });
 
-app.delete("/api/cohorts/:cohortId", (req, res) => {
+app.delete("/api/cohorts/:cohortId", (req, res, next) => {
   Cohort.findByIdAndDelete(req.params.cohortId)
     .then(() => {
       res.status(204).send();
     })
     .catch((error) => {
-      res.status(500).json({ message: "Error while deleting one cohort" });
+      next(error);
     });
 });
 
