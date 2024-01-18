@@ -7,18 +7,16 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Cohort = require("./models/Cohort.model.js");
 const Student = require("./models/Student.model.js");
-const {
-  errorHandler,
-  notFoundHandler,
-} = require("./middleware/error-handling");
-app.use(cors());
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(errorHandler);
-app.use(notFoundHandler);
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middleware/error-handling");
 
 const MONGODB_URI = "mongodb://127.0.0.1:27017/cohort-tools-api";
 
@@ -87,7 +85,9 @@ app.post("/api/cohorts", (request, response, next) => {
 // MIDDLEWARE
 // Research Team - Set up CORS middleware here:
 // ...
-
+app.use(cors());
+app.use(errorHandler);
+app.use(notFoundHandler);
 // ROUTES - https://expressjs.com/en/starter/basic-routing.html
 // Devs Team - Start working on the routes here:
 // ...
