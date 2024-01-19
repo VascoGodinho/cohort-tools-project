@@ -1,7 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
-require("./config")(app);
 const cookieParser = require("cookie-parser");
 const PORT = 5005;
 const cors = require("cors");
@@ -16,19 +16,8 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const allRoutes = require("./routes");
-app.use("/api", allRoutes);
-
-const projectRouter = require("./routes/project.routes");
-app.use("/api", isAuthenticated, projectRouter); // <== UPDATE
-
-const taskRouter = require("./routes/task.routes");
-app.use("/api", isAuthenticated, taskRouter); // <== UPDATE
-
 const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);
-
-require("./error-handling")(app);
 
 const {
   errorHandler,
