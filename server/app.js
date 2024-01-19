@@ -8,7 +8,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Cohort = require("./models/Cohort.model.js");
 const Student = require("./models/Student.model.js");
-const { isAuthenticated } = require("./middleware/jwt.middleware"); // <== IMPORT
+const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -87,15 +87,6 @@ app.post("/api/cohorts", (request, response, next) => {
       next(error);
     });
 });
-// INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
-
-// MIDDLEWARE
-// Research Team - Set up CORS middleware here:
-// ...
-
-// ROUTES - https://expressjs.com/en/starter/basic-routing.html
-// Devs Team - Start working on the routes here:
-// ...
 
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
@@ -196,7 +187,7 @@ app.delete("/api/cohorts/:cohortId", (req, res, next) => {
 
 app.use(errorHandler);
 app.use(notFoundHandler);
-// START SERVER
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
