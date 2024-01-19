@@ -15,6 +15,7 @@ app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors({ origin: ["http://localhost:5173"] }));
 
 const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);
@@ -91,7 +92,6 @@ app.post("/api/cohorts", (request, response, next) => {
 // MIDDLEWARE
 // Research Team - Set up CORS middleware here:
 // ...
-app.use(cors());
 
 // ROUTES - https://expressjs.com/en/starter/basic-routing.html
 // Devs Team - Start working on the routes here:
